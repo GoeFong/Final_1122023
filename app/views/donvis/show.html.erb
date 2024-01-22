@@ -1,0 +1,96 @@
+<div class="max-w-3xl mx-auto px-4">
+  <div class="flex items-center justify-between mt-2">
+    <div class="flex flex-wrap items-center">
+      <h1 class="flex-1 font-bold text-3xl mr-5 ">Đơn vị</h1>
+      <% if @donvi.persisted? %>
+        <%= button_to 'Xóa', @donvi, method: :delete, class: "text-red-700 underline", data: { turbo_confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+
+    <div class="flex-wrap lg:flex items-center lg:space-x-3">
+      <%= link_to donvis_path, class: button_class(theme: "transparent") do %>
+      Tất cả đơn vị
+      <% end %>
+      <%= link_to edit_donvi_path(@donvi), class: button_class(theme:"primary") do %>
+      Sửa
+      <% end %>
+    </div>
+  </div>
+
+  <ul class="flex text-slate-700 mb-6 bg-gray-300 rounded-md py-2 px-2 mt-2">
+      <li class="mr-2">
+        <p class="font-semibold text-red-500">Tên đơn vị</p>
+        <p class="text-black font-bold"><%= @donvi.ten %></p>
+      </li>
+      <li class="mr-2">
+        <p class="font-semibold ">Quốc gia</p>
+        <p><%= @donvi.country_label %></p>
+      </li>
+      <li class="mr-2">
+        <p class="font-semibold ">Thành phố</p>
+        <p><%= @donvi.state_label %></p>
+      </li>
+      <li class="mr-2">
+        <p class="font-semibold ">Địa chỉ</p>
+        <p><%= @donvi.city %></p>
+      </li>
+      <li class="mr-2">
+        <p class="font-semibold ">Số điện thoại</p>
+        <p><%= @donvi.sdt %></p>
+      </li>
+      <li class="mr-2">
+        <p class="font-semibold ">Email</p>
+        <p><%= @donvi.email %></p>
+      </li>
+      <li class="mr-2">
+        <p class="font-semibold ">Trạng thái</p>
+        <% Donvi::TRANGTHAI_DONVI.each do |role| %>
+          <% if role[:gia_tri] == @donvi.status %>
+            <%= role[:label] %>
+          <% end %>
+        <% end %>
+        </p>
+      </li>
+  </ul>
+
+
+  <div class="mb-6 md-6">
+    <%= turbo_frame_tag "new_donvi_users_modal" do %>
+      <%= link_to new_donvi_donvi_user_path(@donvi), data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: button_class(theme: 'primary') do %>
+        Thêm cán bộ cho đơn vị
+      <% end %>
+    <% end %>
+  </div>
+
+  <table class="table-auto border-collapse border-slate-400 w-full mb-6 md-6">
+    <thead class="bg-slate-50 dark:bg-slate-700">
+      <tr>
+        <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Họ và tên</th>
+        <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Chức vụ</th>
+        <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @donvi.donvi_users.each do |vb_user| %>
+        <tr>
+          <td class="border border-slate-300 p-4 text-left"><%= vb_user.user.name %></td>
+          <td class="border border-slate-300 p-4 text-left">
+           <% DonviUser::CHUCVU.each do |role| %>
+            <% if role[:gia_tri] == vb_user.chucvu %>
+              <%= role[:label] %>
+            <% end %>
+          <% end %>
+          </td>
+          <td class="border border-slate-300 p-4 text-left">
+            <%= turbo_frame_tag "edit_donvi_users_modal" do %>
+              <%= link_to 'Sửa', edit_donvi_donvi_user_path(@donvi,vb_user), class: 'text-slate-700 hover:text-slate-900 underline hover:no-underline' %>
+            <% end %>
+            <%= button_to 'Xóa',donvi_donvi_user_path(@donvi,vb_user) , method: :delete, class: "text-red-700 underline", data: { turbo_confirm: 'Are you sure?' } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
+</div>

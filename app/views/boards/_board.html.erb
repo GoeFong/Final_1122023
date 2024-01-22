@@ -1,0 +1,39 @@
+
+<div id="<%= dom_id board %>" class="w-1/4 mt-4"  data-sortable-update-url="<%= sort_board_path(board)%>">
+    <div class="p-2 rounded-md mb-4 border border-gray-500 bg-gray-50">
+      <h2 class="text-lg text-center font-semibold mb-2">
+       
+         <%= turbo_frame_tag "edit_board_modal" do%>
+              <%= link_to board.name, edit_board_path(board), data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: "block  w-full text-center"%>
+          <% end %>
+        </h2>
+      <%= turbo_stream_from "congviecs" %>
+      <div id="all-congviecs-<%= board.id %>" data-controller="sortable" data-sortable-group-value="congviecs" data-sortable-list-id="<%= board.id %>">
+        <% if board.congviecs.present?%>
+          <% stt = 1 %>
+          <% if current_user.admin? %>
+            <% board.congviecs.rank(:row_order).each do |congviec| %>
+              <%= render partial: "congviecs/congviec", locals: { congviec: congviec, board: board, stt: stt } %>
+              <% stt += 1 %>
+            <% end %>
+          <% else%>
+            <% @congviecs.each do |congviec| %>
+              <%= render partial: "congviecs/congviec", locals: { congviec: congviec, board: board, stt: stt } %>
+              <% stt += 1 %>
+            <% end %>
+          <% end %>
+        <% else %>
+        <div class="bg-white p-2 border border-gray-300 rounded-md mb-2">
+          <div class="text-sm font-semibold">Không có công việc</div>
+        </div>
+        <% end %>
+      </div>
+
+      <div class="flex items-center justify-center">
+        <%= turbo_frame_tag "new_vanban_congviec_users_modal" do %>
+          <%= link_to "Thêm thẻ công việc mới", new_board_congviec_path(board), class: "bg-white p-2 border border-gray-300 rounded-md text-gray-600 text-sm cursor-pointer hover-bg-gray-400 w-full" %>
+        <% end %>
+        <%=  button_to "Xóa board",board, method: :delete, class: "bg-danger-500 rounded-md p-1 ml-3 text-white ", data: { turbo_confirm: 'Xác nhận xóa?' }%>
+      </div>  
+    </div>
+</div>

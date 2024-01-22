@@ -1,0 +1,33 @@
+# == Schema Information
+#
+# Table name: donvis
+#
+#  id         :bigint           not null, primary key
+#  city       :string
+#  country    :string
+#  email      :string
+#  sdt        :string
+#  state      :string
+#  status     :string
+#  ten        :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  ten: MyString
+  country: MyString
+  state: MyString
+  city: MyString
+  sdt: MyString
+  email: MyString
+  status: MyString
+
+two:
+  ten: MyString
+  country: MyString
+  state: MyString
+  city: MyString
+  sdt: MyString
+  email: MyString
+  status: MyString

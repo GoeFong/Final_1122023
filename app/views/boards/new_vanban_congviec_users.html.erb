@@ -1,0 +1,61 @@
+<%#= turbo_frame_tag "new_vanban_congviec_users_modal" do %>
+  <div aris-lablledby="modal-title" aria-modal="true" class="fixed inset-0 z-50 overflow-y-auto bg-black/80" role="dialog">
+    <div class="h-screen w-full realtive flex items-center justify-center ">
+      <div class="shadow-xl max-w-2xl bg-white m-1 p-8 prose prose-teal origin-bottom mx-auto dark:bg-slate-700 dark:text-slate-200 min-w-[600px] rounded-2xl">
+        <h2 class="modal-title" class="dark:text-slate-100">Thêm <%= @trangthai_label.label %> | <%= @vanban.title %> </h2>
+        <%= form_with(model: [@vanban, @congviecs], url: create_vanban_congviec_users_boards_path) do |form| %>
+            <%= form.hidden_field :lcongviec_trangthai_id, value: @trangthai_label.id %>
+            <%= form.hidden_field :vanban_id, value: @vanban.id %>
+            <div class="mb-6">
+              <%= form.label :start_date_between, "Thời gian: ", class: label_class %>
+              <%= form.text_field :start_date_between, value: params[:start_date_between], data: { controller: "daterangepicker" }, class: "rounded-full w-full" %>
+
+            </div>
+            <div class="mb-6">
+              <%= form.label :noidung, "Mô tả: ", class: label_class %>
+              <%= form.rich_text_area :noidung, class: input_class  %>
+
+            </div>
+           <div class="mb-6 flex items-center justify-start" >
+            <%= form.label :them_cb, "Thêm cán bộ: ", class: label_class %>
+            <%= form.check_box :them_cb, class: "ml-3", id: "check-canbo", data: { controller: "vanban"} %>
+          </div>
+
+
+          <div class="mb-6" id= "canbos" style=" display: none;">
+            <%= form.label :user_ids, "Cán bộ: ", class: label_class %>
+            <%= form.select :user_ids, options_for_select(@users.map { |user| [user.name, user.id] }), { }, { data: { controller: "slim" }, multiple: true } %>
+          </div>
+
+
+
+            <%= form.submit "Thêm văn bản công việc",class: button_class(theme: 'primary') %>
+            <% if @vanban.persisted? %>
+              <%= link_to "Hủy", search_boards_path(vanban_id: @vanban.id), class: "text-neutral-700 underline inline-block ml-3" %>
+            <% else %>
+              <%= link_to "Hủy", vanbans_path, class: "text-neutral-700 underline inline-block ml-3" %>
+            <% end %>
+        <% end %>
+
+
+      </div>  
+      
+    </div>
+  </div>
+  <script>
+    // window.onload = function() {
+    //     $(document).ready(function () {
+    //     console.log("2223122");
+    //     $("#check-canbo").change(function() {
+    //       if (this.checked) {
+
+    //           $("#canbos").show();
+    //         } else {
+    //           $("#canbos").hide();
+
+    //         }
+    //       });
+    //     })
+    // }
+  </script>
+<%# end %>

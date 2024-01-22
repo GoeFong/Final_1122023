@@ -1,0 +1,107 @@
+<%= turbo_frame_tag "new_vanban_congviec_users_modal" do %>
+  <div aris-lablledby="modal-title" aria-modal="true" class="fixed inset-0 z-50 overflow-y-auto bg-black/80" role="dialog">
+    <div class="h-screen w-full realtive flex items-center justify-center ">
+      <div class="shadow-xl max-w-2xl bg-white m-1 p-8 prose prose-teal origin-bottom mx-auto dark:bg-slate-700 dark:text-slate-200 min-w-[600px] rounded-2xl">
+        <h2 class="modal-title" class="dark:text-slate-100">Thêm công việc cho Board <%= @board.name %></h2>
+        <%= form_with(model: [@board, @congviec]) do |form| %>
+            <% if @congviec.errors.any? %>
+              <div id="error_explanation" class="bg-red-50  rounded text-red-800">
+                <h2 class="text-lg font-semibold "><%= pluralize(@congviec.errors.count, "error") %> Hãy sửa lỗi trước khi thêm:</h2>
+
+                <ul class="list-disc leading-relaxed">
+                  <% @congviec.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            <%= turbo_frame_tag :cs_select do %>
+            
+            <div class="mb-3 flex items-center justify-start" data-controller="form-element">
+              <%= form.button "Validate", formaction: new_board_congviec_path(@board), formmethod: :get, data: { form_element_target: "remoteBtn", turbo_frame: :cs_select } %>
+              <div class="w-1/2 mr-3 "> <!-- Thêm lớp flex, items-center và justify-center -->
+                <%= form.label :prefix_congviec, "Mã công việc ", class: label_class %>
+                <%= form.text_field :prefix_congviec, id: "macongviec",class: input_class, data: {  action: "change->form-element#autosubmitcongviec" } %>
+              </div>
+              <div id="ketquacheck" class="w-1/2 mt-5 text-center">
+                
+              </div>
+            </div>
+
+            <%end%>
+            <div class="mb-3 flex items-center justify-start">
+              
+              <div class="w-1/2 mr-3">
+                <%= form.label :lcongviec_trangthai_id, "Trạng thái: ", class: label_class %>
+                <%= form.select :lcongviec_trangthai_id, options_for_select(LcongviecTrangthai.all.map { |tt| [tt.label,tt.id]},@congviec.lcongviec_trangthai),{},{class:"w-full rounded-md"}%>
+              </div>
+              <div class="w-1/2">
+                <%= form.label :user_id, "Người giám sát: ", class: label_class %>
+                <%= form.select :user_id, options_for_select(User.all.map { |tt| [tt.email,tt.id]},current_user.id),{},{class:"w-full rounded-md"}%>
+              </div>
+            </div>
+            <div class="mb-3 flex items-center justify-start">
+              <div class="w-1/2 mr-3 ">
+                <%= form.label :diachi, "Địa điểm: ", class: label_class %>
+                <%= form.text_field :diachi , class:"ml-1 rounded-md border border-gray-500 w-full" %>
+              </div> 
+              <div class="w-1/2 ">
+                <%= form.label :vanban_id, "Văn bản ", class: label_class %>
+                <%= form.select :vanban_id, options_for_select(Vanban.all.map { |tt| [tt.title,tt.id]},@congviec.vanban),{include_blank: true},{class:"w-full rounded-md"} %>
+              </div> 
+            </div>
+            <div class="mb-3">
+              <%= form.label :start_date_between, "Thời gian: ", class: label_class %>
+              <%= form.text_field :start_date_between, value: params[:start_date_between], data: { controller: "daterangepicker" }, class: "rounded-full w-full" %>
+
+            </div>
+            <div class="mb-3">
+              <%= form.label :noidung, "Mô tả: ", class: label_class %>
+              <%= form.rich_text_area :noidung, class: input_class  %>
+
+            </div>
+            
+            <% if @congviec.persisted? %>
+           <div class="mb-3">
+              <%= form.label :guest_list, "Người thực hiện khác: ", class: label_class %>
+              <%= form.text_field :guest_list, class: input_class , placeholder: "example@gmail.com, example2@gmail.com, ..." %>
+
+            </div>
+
+
+
+           
+              <%= form.submit "Sửa công việc", class: button_class(theme: 'primary'), data:{turbo: false} %>
+              <%= link_to "Hủy", boards_path, data:{turbo: false}, class: "text-neutral-700 underline inline-block ml-3" %>
+            <% else %>
+            <div class="mb-3 flex items-center justify-start" >
+            <%= form.label :them_cb, "Thêm người thực hiện ", class: label_class %>
+            <%= form.check_box :them_cb, class: "ml-3", id: "check-canbo", data: { controller: "vanban"} %>
+          </div>
+
+
+          <div class="mb-3" id= "canbos" style=" display: none;">
+            <div class="mb-3">
+              <%= form.label :user_ids, "Người thực hiện có sẵn trên hệ thống: ", class: label_class %>
+              <%= form.select :user_ids, options_for_select(@users.map { |user| [user.email, user.id] },@congviec.users_cv.map(&:id)), { }, { data: { controller: "slim" }, multiple: true } %>
+
+            </div>
+            <div class="mb-3">
+              <%= form.label :guest_list, "Người thực hiện khác: ", class: label_class %>
+              <%= form.text_field :guest_list, class: input_class , placeholder: "example@gmail.com, example2@gmail.com, ..." %>
+
+            </div>
+          </div>
+              <%= form.submit "Thêm công việc",class: button_class(theme: 'primary')%>
+
+              <%= link_to "Hủy", boards_path, class: "text-neutral-700 underline inline-block ml-3" %>
+            <% end %>
+        <% end %>
+
+
+      </div>  
+      
+    </div>
+  </div>
+
+<% end %>

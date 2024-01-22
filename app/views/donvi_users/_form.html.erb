@@ -1,0 +1,30 @@
+<%= form_with(model: [@donvi,@donvi_user], data: { turbo: false }) do |form| %>
+  <div class="lg:col-span-1 mb-6">
+    <%= form.label :user_id, "Cán bộ",class: label_class %>
+
+    <% if @donvi_user.present?%>
+        <%= form.collection_select :user_id,User.find_by_sql(" SELECT users.*  FROM users LEFT JOIN donvi_users ON users.id = donvi_users.user_id where donvi_users.user_id is null") , :id, :name, {}, { class: "select rounded-full border-1 w-full" } do |user|
+            if @donvi_user.present? && user.id == @donvi_user.user_id
+            { selected: 'selected' }
+            else
+            {}
+            end
+        end %>
+    <% else %>
+        <% if @users_not_in_donvi.present? %>
+            <%= form.collection_select :user_id, @users_not_in_donvi, :id, :name, {}, class: "select rounded-full border-1 w-full" %>
+        <% else %>
+            <p>No available users.</p>
+        <% end %>
+
+    <% end %>
+
+  </div>
+  <div class="lg:col-span-1 mb-6">
+    <%= form.label :chucvu,"Chức vụ", class: label_class %>
+    <%= form.select :chucvu, options_for_select(DonviUser::CHUCVU.map { |t| [t[:label], t[:gia_tri]] }), {}, class: "select rounded-full border-1 w-full" %>
+  </div>
+  <%= form.submit class: button_class(theme: 'primary')  %>
+  <%= link_to "Hủy", donvi_path(@donvi), class: "text-neutral-700 underline inline-block ml-3" %>
+
+<% end %>

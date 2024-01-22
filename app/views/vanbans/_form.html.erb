@@ -1,0 +1,87 @@
+<div class="p-8 mb-20 bg-white border rounded">
+<%= form_with(model: vanban, data:{ turbo: false ,controller: "form-reset"}) do |form| %>
+<% if vanban.errors.any? %>
+<div id="error_explanation" class="bg-red-50 p-6 rounded text-red-800">
+  <h2 class="text-lg font-semibold mb-3"><%= pluralize(vanban.errors.count, "error") %> prohibited this vanban from being saved:</h2>
+
+  <ul class="list-disc leading-relaxed">
+    <% vanban.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+  <div class="input-group">
+        <%= form.label :title,"Tên văn bản" ,class: label_class %>
+          <%= form.text_field :title, class: input_class %>
+      </div>
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 input-group">
+    <div class="lg:col-span-1">
+      
+        <%= form.label :loaivanban, "Loại văn bản",class: label_class %>
+        <%= form.select :loaivanban, options_for_select(Vanban::LOAI_VANBAN.map { |t| [t[:label], t[:gia_tri]] }, vanban.loaivanban), { prompt: 'Chọn loại văn bản' }, class: "select rounded-full border-1 w-full" %>
+
+    </div>
+    <div class="lg:col-span-1">
+      <%= form.label :level, "Mức độ khẩn",class: label_class %>
+      <%= form.select :level, Vanban::MUCDO_VANBAN,{}, {class: "select rounded-full border-1  w-full"} %>
+
+    </div>
+  </div>
+  <div class="input-group">
+        <% if vanban.file_vanban.attached? %>
+          <%= form.label :file_vanban,"File đính kèm", class: label_class %>
+          <%= form.file_field :file_vanban, class: "block w-full text-sm text-slate-500
+          file:mr-4 file:py-2 file:px-4
+          file:rounded-full file:border-0
+          file:text-sm file:font-semibold
+          file:bg-sky-50 file:text-sky-700
+          hover:file:bg-sky-100" %>
+          <%= link_to vanban.file_vanban.filename, url_for(vanban.file_vanban), target: "_blank" %>
+        <% else %>
+          <%= form.label :file_vanban, "File đính kèm",class: label_class %>
+          <%= form.file_field :file_vanban, class: "block w-full text-sm text-slate-500
+          file:mr-4 file:py-2 file:px-4
+          file:rounded-full file:border-0
+          file:text-sm file:font-semibold
+          file:bg-sky-50 file:text-sky-700
+          hover:file:bg-sky-100" %>
+        <% end %>
+      </div>
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 input-group">
+      <div class="lg:col-span-1">
+        <%= form.label :donvi_id,"Thuộc đơn vị", class: label_class %>
+        <%= form.select :donvi_id, Donvi.pluck(:ten,:id) ,{}, {class: "select rounded-full border-1  w-full"}  %>
+      </div>
+      <div class="lg:col-span-1 flex items-center justify-center mt-5">
+        <%= turbo_frame_tag "new_donvi_modal" do %>
+          <%= link_to new2_donvis_path, data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: button_class(theme: 'primary') do %>
+          Thêm đơn vị mới
+          <% end %>
+        <% end %>
+        
+      </div>
+  </div>
+  <div class="input-group">
+        <%= form.label :ghichu,"Ghi chú" ,class: label_class %>
+          <%= form.rich_text_area :ghichu, class: input_class %>
+      </div>
+  <% if admin? || current_user.has_role?(:edit_status_vanban) || current_user.has_role?(:xem_vanban)%>
+    <div class="input-group mb-3">
+      <%= form.label :status,"Trạng thái" ,class: label_class %>
+        <%= form.select :status, options_for_select(Vanban::TT_VANBAN.map { |t| [t[:label], t[:gia_tri]] }, vanban.status), { prompt: 'Chọn trạng thái văn bản' }, class: "select rounded-full border-1 w-full" %>
+    </div>
+
+  <% end %>
+
+<% if vanban.persisted? %>
+<%= form.submit "Sửa văn bản",class: button_class(theme: 'primary') %>
+<%= link_to "Hủy", vanbans_path, class: "text-neutral-700 underline inline-block ml-3" %>
+<% else %>
+<%= form.submit "Thêm văn bản",class: button_class(theme: 'primary') %>
+
+<%= link_to "Hủy", vanbans_path, class:  "text-neutral-700 underline inline-block ml-3" %>
+<% end %>
+<% end %>
+</div>

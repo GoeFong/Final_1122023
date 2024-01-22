@@ -1,0 +1,84 @@
+<div class="max-w-3xl mx-auto px-4">
+  <div class="flex items-center justify-start">
+    <div class="flex flex-wrap items-center ">
+    <h1 class="flex-1 font-bold text-3xl mr-5">Văn bản - <%= @vanban.donvi.ten %></h1>
+    <% if @vanban.persisted? %>
+      <%= button_to 'Xóa', @vanban, class: "text-red-700 underline", data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+    <% end %>
+
+    </div>
+    <div class="flex-wrap lg:flex items-center lg:space-x-3">
+      <%= link_to vanbans_path, class: button_class(theme: "transparent") do %>
+      Tắt cả văn bản
+      <% end %>
+        <%= turbo_frame_tag "edit_vanban_modal" do%>
+          <%= link_to edit_vanban_path(@vanban), data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: button_class(theme: 'primary') do %>
+          Sửa
+          <% end %>
+        <% end %>
+
+    </div>
+  </div>
+  
+  <ul class="text-slate-700 mb-6">
+      <li>
+        <p class="font-semibold">Tựa đề:</p>
+        <p><%= @vanban.title %></p>
+      </li>
+      <li>
+        <p class="font-semibold">Độ khẩn:</p>
+        <p><%= @vanban.level %></p>
+      </li>
+      <li>
+        <p class="font-semibold">Ghi chú:</p>
+        <p><%= @vanban.ghichu %></p>
+      </li>
+      <li>
+        <p class="font-semibold">File văn bản:</p>
+        <% if @vanban.file_vanban.attached? %>
+          <p><%= link_to @vanban.file_vanban.filename, url_for(@vanban.file_vanban), target: "_blank" %></p>
+        <% end %>
+      </li>
+     
+  </ul>
+  <div class="mb-6 md-6">
+    <%= turbo_frame_tag "new_vanban_users_modal" do %>
+      <%= link_to new_vanban_vanban_user_path(@vanban), data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: button_class(theme: 'primary') do %>
+        Thêm cán bộ cho văn bản
+      <% end %>
+    <% end %>
+  </div>
+
+  <table class="table-auto border-collapse border-slate-400 w-full mb-6 md-6">
+    <thead class="bg-slate-50 dark:bg-slate-700">
+      <tr>
+        <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Họ và tên</th>
+        <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Vai trò</th>
+        <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @vanban.vanban_users.each do |vb_user| %>
+        <tr>
+          <td class="border border-slate-300 p-4 text-left"><%= vb_user.user.name %></td>
+          <td class="border border-slate-300 p-4 text-left">
+           <% VanbanUser::VAITRO.each do |role| %>
+            <% if role[:gia_tri] == vb_user.role %>
+              <%= role[:label] %>
+            <% end %>
+          <% end %>
+          </td>
+          <td class="border border-slate-300 p-4 text-left">
+            <%= turbo_frame_tag "edit_vanban_users_modal" do %>
+              <%= link_to 'Sửa', edit_vanban_vanban_user_path(@vanban,vb_user), class: 'text-slate-700 hover:text-slate-900 underline hover:no-underline' %>
+            <% end %>
+            <%= button_to 'Xóa',vanban_vanban_user_path(@vanban,vb_user) , method: :delete, class: "text-red-700 underline", data: { turbo_confirm: 'Are you sure?' } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
+
+</div>

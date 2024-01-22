@@ -1,0 +1,31 @@
+<div class="max-w-3xl mx-auto px-4">
+    <div class="flex items-center justify-between mb-6 flex-wrap">
+        <%= form_for(@user) do |f| %>
+
+        <% if @user.errors.any? %>
+            <div id="error_explanation">
+            <h2>
+                <%= pluralize(@user.errors.count, "error") %>
+                prohibited this user from being saved:
+            </h2>
+            <ul>
+                <% @user.errors.full_messages.each do |message| %>
+                <li>
+                    <%= message %>
+                </li>
+                <% end %>
+            </ul>
+            </div>
+        <% end %>
+        <div class="mb-6">
+            <%= f.label "Quyền ", class: label_class %>
+
+            <%= f.select :role_ids, Role.all.pluck(:name, :id), { include_blank: true }, { data: { controller: "slim", action: "change->form-element#autosubmit" }, class: input_class, multiple: true } %>
+
+        </div>
+
+        <%= f.button :submit %>
+
+        <% end %>
+    </div>
+</div>

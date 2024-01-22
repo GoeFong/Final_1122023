@@ -1,0 +1,109 @@
+<%= content_tag :tr, id: dom_id(congviec), class: "hover:bg-gray-100 transition-colors group" do %>
+  <td class="flex gap-x-4 items-center py-4 pl-10">
+    <input
+      type="checkbox"
+      class="w-6 h-6 text-indigo-600 rounded-md border-gray-300"
+      
+    />
+    <div>
+      <% if congviec.board.present?%>
+        <%= link_to board_congviec_path(congviec.board_id,congviec), class: "text-lg font-semibold text-gray-700",data:{turbo: false}  do %>
+          <%= congviec.macongviec %>
+        <% end %>
+      <% else %>
+      <%= link_to show_congviec_path(congviec), class: "text-lg font-semibold text-gray-700",data:{turbo: false}  do %>
+          <%= congviec.macongviec %>
+        <% end %>
+      <% end %>
+
+      <div class="font-medium text-gray-400">
+        <% if congviec.vanban.present? %>
+          <%#= congviec.vanban.title %>
+          <% if congviec.vanban.file_vanban.attached? %>
+          <%= link_to congviec.vanban.title, url_for(congviec.vanban.file_vanban), target: "_blank" %>
+            <% else %>
+          <%= link_to congviec.vanban.title, vanban_path(congviec.vanban), target: "_blank" %>
+
+
+          <% end %>
+        <% else %>
+          Chưa có văn bản
+        <% end %>
+        </div>
+    </div>
+  </td>
+  <td class="font-medium text-center">
+      <% if congviec.board_id.present?%>
+    
+    <%= congviec.board.name %>
+    <% else %>
+    Không có board
+    <% end%>
+  </td>
+
+  <td class="py-4 flex justify-center" >
+    <span class="flex justify-center py-1 font-medium capitalize rounded-full w-full text-black-300 text-xs mr-2 " style="background-color: <%= congviec.lcongviec_trangthai.color %>;">
+      <%= congviec.lcongviec_trangthai.label %>
+
+    </span>
+    </td>
+  <td >
+    <p>Cán bộ trên hệ thống:</p>
+    <% if congviec.users_cv.present? %>
+      <% congviec.users_cv.each do |user|%>
+        <div class="bg-gray-200 text-black-300 text-xs mt-1 mr-3">
+          <%= user.email%>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-black-300 text-xs mt-1 mr-3">
+        Không có cán bộ
+      </div>
+
+    <% end %>
+    <p>Cán bộ bên ngoài: </p>
+    <% if congviec.email_guest.present? %>
+      <% congviec.email_guest.each do |user|%>
+        <div class="bg-gray-200 text-black-300 text-xs mt-1 mr-3">
+          <%= user%>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-black-300 text-xs mt-1 mr-3">
+        Không có cán bộ
+      </div>
+
+    <% end %>
+
+  </td>
+  <td class="font-medium text-center"><%= congviec.noidung.present? ? congviec.noidung : "..." %></td>
+  <td class="font-medium text-center"><%= congviec.ngay_bd.strftime('%d/%m/%Y %H:%M:%S') %></td>
+  <td class="font-medium text-center"><%= congviec.ngay_kt.strftime('%d/%m/%Y %H:%M:%S') %></td>
+
+  <td>
+    <span class="inline-block w-20 group-hover:hidden">
+      <%= congviec.created_at.strftime("%d/%m/%Y") %>
+    </span>
+    <div
+      class="hidden group-hover:flex group-hover:w-20 group-hover:items-center group-hover:text-gray-500 group-hover:gap-x-2"
+    >
+    <%= turbo_frame_tag "edit_congviec_modal" do %>
+      <% if congviec.board_id.present?%>
+        <%= button_to(edit_board_congviec_path(congviec.board_id,congviec), method: :get, data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: "p-2 hover:rounded-md hover:bg-gray-200") do %>
+          <%= render_svg "icons/pencil", styles: "w-6 h-6 fill-current" %>
+        <% end %>
+      <% else %>
+        <%= button_to(edit_congviec_path(congviec), method: :get, data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: "p-2 hover:rounded-md hover:bg-gray-200") do %>
+          <%= render_svg "icons/pencil", styles: "w-6 h-6 fill-current" %>
+        <% end %>
+      <% end %>
+
+    <% end %>
+
+      <%= button_to "/", method: :delete, class: "p-2 hover:rounded-md hover:bg-gray-200",form: { data: {  turbo_confirm: 'Bạn muốn xóa công việc này?' }} do %>
+        <%= render_svg "icons/trash", styles: "w-6 h-6 fill-current"%>
+      <% end %>
+    </div>
+  </td>
+  
+<% end %>

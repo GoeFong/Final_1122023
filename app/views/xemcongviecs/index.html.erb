@@ -1,0 +1,97 @@
+<div class="flex items-center justify-between py-7 px-10">
+  <div>
+    <h1 class="text-2xl font-semibold leading-relaxed text-gray-800">Công việc</h1>
+  </div>
+</div>
+
+<%= search_form_for(@q, url: xemcongviecs_path, data: { turbo_frame: :kq }, class: "px-6") do |f| %>
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div class="lg:col-span-1 grid grid-cols-1 gap-1 items-center">
+      <div class="col-span-1">
+        <%= f.label :macongviec_cont, "Mã công việc", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.search_field :macongviec_cont, class: "w-full h-8 rounded-md border p-2 focus:outline-none focus:ring focus:border-blue-300" %>
+      </div>
+
+      <div class="col-span-1">
+        <%= f.label :lcongviec_trangthai_label_in, "Trạng thái", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.collection_check_boxes(:lcongviec_trangthai_label_in, LcongviecTrangthai.all, :label, :label, {}, { data: { turbo_frame: :kq }, onchange: 'this.form.requestSubmit();' }) %>
+      </div>
+
+      <div class="col-span-2">
+        <%= f.label :vanban_title_cont, "Tên văn bản", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.select :vanban_title_cont, options_for_select(Vanban.all.map { |tt| [tt.title, tt.title] }), { include_blank: true }, class: "w-full h-8 rounded-md p-2 border focus:outline-none focus:ring focus:border-blue-300", data: { controller: "slim", turbo_frame: :kq } %>
+      </div>
+
+      <div class="col-span-2">
+        <%= f.label :start_date_between, "Thời gian:", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.date_field :created_at_gteq, class: "rounded-full w-full p-2 border focus:outline-none focus:ring focus:border-blue-300" %>
+        đến
+        <%= f.date_field :created_at_lteq, class: "rounded-full w-full p-2 border focus:outline-none focus:ring focus:border-blue-300" %>
+      </div>
+
+      <div class="col-span-2">
+        <%= f.label :congviec_users_user_email_cont, "Tên người dùng", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :guest_list_or_congviec_users_user_email_cont, class: "w-full h-8 rounded-md border p-2 focus:outline-none focus:ring focus:border-blue-300" %>
+      </div>
+    </div>
+
+    <div class="lg:col-span-1 flex items-center justify-end mt-4 mr-3">
+      <%= f.submit "Tìm kiếm", class: "inline-flex gap-x-2 items-center py-2.5 px-6 text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1" %>
+    </div>
+  </div>
+<% end %>
+<div class="flex items-center justify-between py-7 px-10">
+<%= link_to new_congviec_path, class: "inline-flex gap-x-2 items-center py-2.5 px-6 text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1" do %>
+    <%= render_svg "icons/plus" , styles: "w-6 h-6 fill-current"%>
+    <span class="text-sm font-semibold tracking-wide">Thêm công việc</span>
+
+  <% end %>
+</div>
+<%= turbo_stream_from "xemcv" %>
+<%= turbo_frame_tag :kq do %>
+
+<table class="w-full border-b border-gray-200">
+  <thead>
+    <tr class="text-sm font-medium text-gray-700 border-b border-gray-200">
+      <td width="15%" class="pl-10">
+       
+            <div class="flex items-center gap-x-4">
+            <input
+                type="checkbox"
+                class="w-6 h-6 text-indigo-600 rounded-md border-gray-300"
+                data-controller="indeterminate-checkbox"
+            />
+            <%= sort_link(@q ,:macongviec) do %>
+              <span>Mã công việc</span>
+            <% end %>
+            </div>
+      </td>
+      <td width="10%" class="py-4 px-4 text-center">Board công việc</td>
+      <td width="10%" class="py-4 px-4 text-center">Trạng thái công việc</td>
+      <td width="15%" class="py-4 px-4 text-center">Cán bộ</td>
+      <td width="30%" class="py-4 px-4 text-center">Nội dung</td> 
+      <td width="10%" class="py-4 px-4 text-center">Ngày giờ bắt đầu</td> 
+      <td width="10%" class="py-4 px-4 text-center">Ngày giờ kết thúc</td> 
+      <td width="5%" class="py-4 pr-10 pl-4 text-center">
+        <%= render_svg "icons/filter", styles: "w-6 h-6 fill-current" %>
+      </td>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+
+        <%= turbo_frame_tag :xemcvs do %>
+            <% @congviecs.each do |congviec|%>
+                <%= render "congviec", congviec: congviec  %>
+            <% end %>
+        <% end %>
+        <%= turbo_frame_tag :pagination, 
+        loading: :lazy,
+        src: xemcongviecs_path(format: :turbo_stream, page: @pagy.next)
+        %>
+    
+  </tbody>
+</table>
+<%== pagy_nav(@pagy) %>
+<% end %>

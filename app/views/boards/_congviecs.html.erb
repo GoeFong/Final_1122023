@@ -1,0 +1,62 @@
+<% list.each do |trangthaicol| %>
+  <div class="w-1/4" data-sortable-update-url="<%= sort_lcongviec_trangthai_path(trangthaicol)%>" >
+    <!-- Danh sách 1 -->
+    <div class="p-2 rounded-md mb-4 border border-gray-500 <%= trangthaicol.color %>">
+      <h2 class="text-lg font-semibold mb-2"><%= trangthaicol.label %></h2>
+
+      <% trangthaicol_value = trangthaicol.gia_tri %>
+      <% trangthaicol_users = congviecs.select { |congviecs| congviecs.lcongviec_trangthai.gia_tri == trangthaicol_value } %>
+
+         <!-- Thẻ công việc -->
+      <% if trangthaicol_users.any? %>
+        <div class="" data-controller="sortable" data-sortable-group-value="congviecs" data-sortable-list-id="<%=trangthaicol.id%>">
+          <% dem = 1 %>
+            <% trangthaicol_users.each do |congviec_user| %>
+              <div class="bg-white p-2 rounded-md mb-2" data-sortable-update-url="<%= sort_vanban_congviec_path(vanban,congviec_user)%>">
+                <div class="text-sm font-semibold">Công việc <%= dem %> - <%= congviec_user.macongviec %></div>
+                <div class="text-gray-600 text-xs mt-1"><%= congviec_user.noidung %></div>
+                
+                <div class="">
+                    <div class="text-sm font-semibold">
+                        Cán bộ:
+                    </div>
+                    <div class="flex-row items-center justify-start text-xs mt-1">
+                        <% if congviec_user.users_cv.any? %>
+                            <% congviec_user.users_cv.each do |user| %>
+                                <div class="bg-gray-200 text-black-300 text-xs mt-1 mr-3">
+                                    <%= user.email%>
+                                </div>
+                            <% end %>
+                        <% else %>
+                            <div class="bg-gray-200 text-black-300 text-xs mt-1">
+                                Chưa có cán bộ
+                            </div>
+                        <% end %>
+                        
+                    </div>
+                </div>
+              </div>
+              <% dem += 1 %>
+            <% end %>
+        </div>
+
+        <% else %>
+        <div class="" data-controller="sortable" data-sortable-group-value="congviecs" data-sortable-list-id="<%=trangthaicol.id%>">
+          </div>
+
+          <div class="bg-white p-2 rounded-md mb-2">
+            <div class="text-sm font-semibold">Không có công việc</div>
+          </div>
+        <% end %>
+                <!-- Các phần tử khác ở đây -->
+        <% if vanban.present? %>
+            <%= turbo_frame_tag "new_vanban_congviec_users_modal" do %>
+                <%= link_to "Thêm thẻ công việc mới", new_vanban_congviec_users_boards_path(vanban_id: vanban.id, trangthai_cv: trangthaicol_value), class: "bg-white p-2 rounded-md text-gray-600 text-sm cursor-pointer hover:bg-gray-400 w-full" %>
+            <% end %>
+        <% end %>
+
+    </div>
+
+
+  </div>
+<% end %>

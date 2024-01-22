@@ -1,0 +1,22 @@
+<div class="flex">
+  <div class="w-1/2 mt-2 ">
+
+    <label for="rangethongke" class="mt-2"> Thời gian thống kê:</label>
+    <input id="rangethongke" class="rounded-md mr-2"type="text" data-controller="daterangepicker" style="text-align:center" size="40">
+    <div data-controller="thongke">
+      <button class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 focus:outline-none mt-2 py-2 px-10 rounded bg-indigo-600 hover:bg-indigo-700 text-white" data-action="click->thongke#showthongkecongviec">Thống kê biểu đồ tròn</button>
+      <button class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 focus:outline-none mt-2 py-2 px-10 rounded bg-indigo-600 hover:bg-indigo-700 text-white" data-action="click->thongke#showthongkecongviec2">Thống kê theo bảng</button>
+      <%= turbo_stream_from :showthongke%>
+      <%= turbo_frame_tag :showthongke do %>
+        <%= render partial: 'home/thongke' %>
+      <% end %>
+    </div>
+  </div>
+  <div class="w-1/2">
+    <%=  render "home/notifications" %>
+
+  </div>
+
+</div>
+
+

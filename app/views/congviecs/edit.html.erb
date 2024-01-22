@@ -1,0 +1,17 @@
+
+
+<%= turbo_frame_tag "edit_congviec_modal" do %>
+  <div aris-lablledby="modal-title" aria-modal="true" class="fixed inset-0 z-50 overflow-y-auto bg-black/80" role="dialog">
+    <div class="h-screen w-full realtive flex items-center justify-center ">
+      <div class="shadow-xl max-w-2xl bg-white m-1 p-8 prose prose-teal origin-bottom mx-auto dark:bg-slate-700 dark:text-slate-200 min-w-[600px] rounded-2xl">
+        <h1 class="modal-title" class="dark:text-slate-100">Sửa công việc</h1>
+         <% if @congviec.persisted? %>
+          <%= button_to 'Xóa', board_congviec_path(@board,@congviec), method: :delete, class: "text-red-700 underline", data: { turbo_confirm: 'Are you sure?' } %>
+        <% end %>
+         <%= render 'form', congviec: @congviec %>
+      </div>  
+      
+    </div>
+  </div>
+    
+<% end %>

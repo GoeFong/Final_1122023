@@ -1,0 +1,31 @@
+
+  <div id="<%= dom_id lcongviec_trangthai %>" class="w-1/4" data-sortable-update-url="<%= sort_lcongviec_trangthai_path(lcongviec_trangthai) %>">
+    <!-- Danh sách 1 -->
+    <div class="p-2 rounded-md mb-4 border border-gray-500 <%= lcongviec_trangthai.color %>">
+      <h2 class="text-lg font-semibold mb-2"><%= lcongviec_trangthai.label %></h2>
+
+      <% trangthaicol_value = lcongviec_trangthai.gia_tri %>
+      <% congviecs_in_trangthai = @congviec_trangthai[lcongviec_trangthai.gia_tri] %>
+
+      <% if congviecs_in_trangthai.present? %>
+        <%= turbo_stream_from "congviecs" %>
+        <div id="all-congviecs" data-controller="sortable" data-sortable-group-value="congviecs" data-sortable-list-id="<%= lcongviec_trangthai.id %>">
+          <% stt = 1 %>
+        <% congviecs_in_trangthai.each do |congviec| %>
+          <%= render partial: "congviecs/congviec", locals: { congviec: congviec, vanban: @vanban, congviecs: @congviecs, stt: stt } %>
+          <% stt += 1 %>
+        <% end %>
+        </div>
+      <% else %>
+        <div class="bg-white p-2 rounded-md mb-2">
+          <div class="text-sm font-semibold">Không có công việc</div>
+        </div>
+      <% end %>
+
+      <% if @vanban.present? %>
+        <%= turbo_frame_tag "new_vanban_congviec_users_modal" do %>
+          <%= link_to "Thêm thẻ công việc mới", new_vanban_congviec_users_boards_path(vanban_id: @vanban, trangthai_cv: trangthaicol_value), class: "bg-white p-2 rounded-md text-gray-600 text-sm cursor-pointer hover-bg-gray-400 w-full" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>

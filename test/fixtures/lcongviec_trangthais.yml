@@ -1,0 +1,22 @@
+# == Schema Information
+#
+# Table name: lcongviec_trangthais
+#
+#  id         :bigint           not null, primary key
+#  color      :string
+#  gia_tri    :string
+#  label      :string
+#  row_order  :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  label: MyString
+  gia_tri: MyString
+  color: MyString
+
+two:
+  label: MyString
+  gia_tri: MyString
+  color: MyString

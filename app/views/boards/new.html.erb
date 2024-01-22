@@ -1,0 +1,50 @@
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mx-auto max-w-3xl">
+        <%= form_with( model: @board, local: true ,class: "space-y-8 divide-gray-200") do |f| %>
+            <% if @board.errors.any? %>
+              <div id="error_explanation" class="bg-red-50  rounded text-red-800">
+                <h2 class="text-lg font-semibold "><%= pluralize(@board.errors.count, "error") %> Hãy sửa lỗi trước khi thêm:</h2>
+
+                <ul class="list-disc leading-relaxed">
+                  <% @board.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            <div class="space-y-8 divide-gray-200 divide-y">
+                <div class="pt-8">
+                    <div class="">
+                        <h3 class="text-lg font-medium leading-6 text-gray-900">Thêm board</h3>
+                        <p class="mt-1 text-sm text-gray-500">Trang thêm board xử lí công việc</p>
+                    </div>
+                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <div class="sm:col-span-6">
+                            <%= f.label :name, "Tên board", class: " block text-sm font-medium text-gray-700"%>
+                            <div class="mt-1">
+                                <%= f.text_field :name , class:"block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"%>
+                            </div>
+                        </div>
+                        
+                        <div class="sm:col-span-6">
+                            <%= f.label :user_id, "Người giám sát", class: " block text-sm font-medium text-gray-700"%>
+                            <div class="mt-1">
+                                <%# <%= f.text_field :user_id, class:"block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"%>
+                                <%= f.select :user_id, options_for_select(User.all.map { |tt| [tt.email,tt.id]},@board.user),{include_blank: true},{class:"block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"} %>
+                            
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="pt-5">
+                <div class="flex justify-end">
+                    <%= link_to "Hủy", boards_path , class:"rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" %>
+                    <%= f.submit "Thêm Board", class: "ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"%>
+                </div>
+            </div>
+        <% end %>
+    </div>
+</div>

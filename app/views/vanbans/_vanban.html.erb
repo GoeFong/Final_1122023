@@ -1,0 +1,52 @@
+<%= content_tag :tr, id: dom_id(vanban), class: "hover:bg-gray-100 transition-colors group" do %>
+  <td class="flex gap-x-4 items-center py-4 pl-10">
+    <input
+      type="checkbox"
+      class="w-6 h-6 text-indigo-600 rounded-md border-gray-300"
+      
+    />
+    <div>
+      <%= link_to vanban, class: "text-lg font-semibold text-gray-700" do %>
+        <%= vanban.title %>
+      <% end %>
+      <div class="font-medium text-gray-400">
+        <% Vanban::LOAI_VANBAN.each do |role| %>
+          <% if role[:gia_tri] == vanban.loaivanban %>
+            <%= role[:label] %>
+          <% end %>
+        <% end %></div>
+    </div>
+  </td>
+  <td class="font-medium text-center">Mức độ <%= vanban.level %></td>
+  <td class="py-4 flex justify-center">
+    <span class="flex justify-center py-1 w-24 font-medium capitalize rounded-full mb-3 <%= status_class(vanban.status) %>">
+      <% Vanban::TT_VANBAN.each do |role| %>
+        <% if role[:gia_tri] == vanban.status %>
+          <%= role[:label] %>
+        <% end %>
+      <% end %>
+      
+    </span>
+  </td>
+  <td class="font-medium text-center"><%= vanban.donvi.ten%></td>
+  <td class="font-medium text-center"><%= vanban.ghichu %></td>   
+  <td>
+    <span class="inline-block w-20 group-hover:hidden">
+      <%= vanban.created_at.strftime("%d/%m/%Y") %>
+    </span>
+    <div
+      class="hidden group-hover:flex group-hover:w-20 group-hover:items-center group-hover:text-gray-500 group-hover:gap-x-2"
+    >
+    <%= turbo_frame_tag "edit_vanban_modal" do %>
+      <%= button_to(edit_vanban_path(vanban), method: :get, data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: "p-2 hover:rounded-md hover:bg-gray-200") do %>
+        <%= render_svg "icons/pencil", styles: "w-6 h-6 fill-current" %>
+      <% end %>
+    <% end %>
+
+      <%= button_to vanban, method: :delete, class: "p-2 hover:rounded-md hover:bg-gray-200",form: { data: {  turbo: false, turbo_confirm: 'Bạn muốn xóa văn bản này?' }} do %>
+        <%= render_svg "icons/trash", styles: "w-6 h-6 fill-current"%>
+      <% end %>
+    </div>
+  </td>
+  
+<% end %>

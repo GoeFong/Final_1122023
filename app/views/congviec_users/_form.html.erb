@@ -1,0 +1,14 @@
+<%= form_with(model: [@board,@congviec,@congviec_user], data: { turbo: false }) do |form| %>
+    <div class="mb-6">
+        <span> Văn bản : <%= @board.name%></span>
+    </div>
+    <div class="mb-6">
+        <span> Mã công việc: <%= @congviec.macongviec%></span>
+    </div>
+    <div class="mb-6">
+        <%= form.label :user_id, "Cán bộ: ", class: label_class %>
+        <%= form.select :user_id, options_for_select(@users.map { |user| [user.email, user.id] }), { }, { data: { controller: "slim" }} %>
+    </div>
+  <%= form.submit "Thêm người thực hiện",class: button_class(theme: 'primary')  %>
+  <%= link_to "Hủy", board_congviec_path(@board,@congviec), class: "text-neutral-700 underline inline-block ml-3" %>
+<% end %>

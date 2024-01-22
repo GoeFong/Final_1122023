@@ -1,0 +1,22 @@
+<%= turbo_frame_tag :showthongke do %>
+    <div class="flex py-4">
+        <p class="text-2xl font-semibold leading-relaxed text-gray-800">Thống kê Công việc | Biểu đồ tròn </p>
+
+    </div>
+    <%
+    data = Congviec.group(:lcongviec_trangthai).count.transform_keys { |k| k&.label || 'Unknown' }
+    total = data.values.sum.to_f
+    color=[]
+    data.each do |a ,b|
+        color << LcongviecTrangthai.find_by(label: a)&.color
+    end
+    percentages = data.transform_values { |count| (count / total) * 100 }
+    %>
+    <%= pie_chart(
+    data,
+    width: "800px",
+    height: "500px",
+    colors: color
+    ) %>
+<% end %>
+

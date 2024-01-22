@@ -1,0 +1,81 @@
+<div class="max-w-5xl mx-auto px-4">
+  <div class="flex items-center justify-between">
+    <div class="flex flex-wrap items-center ">
+    <h1 class="flex-1 font-bold text-3xl mr-5">Board <%= @congviec.board.name %> |<%= @congviec.macongviec %></h1>
+    
+
+    </div>
+    <div class="flex items-center justify-start  ">
+      <% if @congviec.persisted? %>
+      <%= button_to 'Xóa', board_congviec_path(@board,@congviec), method: :delete , class: "text-red-700 underline mr-3", data: {turbo_confirm: 'Are you sure?' } %>
+    <% end %>
+      <%= link_to boards_path, class: button_class(theme: "transparent") do %>
+        Trở lại
+      <% end %>
+      <div class="lg:col-span-1 flex items-center mr-3">
+        <%#= link_to search_boards_path(board_id: @board), class: button_class(theme: "primary") do %>
+        <%# Board %>
+        <%# end %>
+
+      </div>
+        <%= turbo_frame_tag "edit_congviec_modal" do%>
+          <%= link_to edit_board_congviec_path(@board,@congviec), data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: button_class(theme: 'primary') do %>
+          Sửa
+          <% end %>
+        <% end %>
+
+    </div>
+  </div>
+
+  <ul class="border border-gray-400 rounded-md bg-gray-200 text-slate-700 mb-6 items-center">
+      <li class="ml-2">
+        <p class="font-semibold">Mã công việc :</p>
+        <p><%= @congviec.macongviec %></p>
+      </li>
+      <li class="ml-2">
+        <p class="font-semibold">Nội dung:</p>
+        <p><%= @congviec.noidung %></p>
+      </li>
+       <li class="ml-2">
+        <p class="font-semibold">Danh sách mời :</p>
+        <p><%= @congviec.guest_list %></p>
+      </li>
+      <li class="ml-2">
+        <p class="font-semibold">Ngày bắt đầu:</p>
+        <p><%=@congviec.ngay_bd.strftime('%d-%m-%Y %H:%M:%S') %></p>
+      </li>
+      <li class="ml-2">
+        <p class="font-semibold">Ngày kết thúc:</p>
+        <p><%= @congviec.ngay_kt.strftime('%d-%m-%Y %H:%M:%S')%></p>
+      </li>
+      
+  </ul>
+
+    <div class="mb-6 md-6">
+    <%= turbo_frame_tag "new_congviec_users_modal" do %>
+      <%= link_to new_board_congviec_congviec_user_path(@board,@congviec), data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: button_class(theme: 'primary') do %>
+        Thêm cán bộ cho công việc
+      <% end %>
+    <% end %>
+  </div>
+
+  <table class="table-auto border-collapse border-slate-400 w-full mb-6 md-6">
+    <thead class="bg-slate-50 dark:bg-slate-700">
+      <tr>
+        <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Tên | Email</th>
+        <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Vai trò</th>
+        <%# <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left"></th> %>
+      </tr>
+    </thead>
+      <% @user_congviec.each do |cv| %>
+        <tr>
+          <td class="border border-slate-300 p-4 text-left"><%= cv.user.name %>| <%=cv.user.email%></td>
+          <td class="border border-slate-300 p-4 text-left">Người thực hiện</td>
+        </tr>
+      <% end %>
+    <tbody>
+     
+    </tbody>
+
+  </table>
+</div>

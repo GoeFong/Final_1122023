@@ -1,0 +1,43 @@
+# == Schema Information
+#
+# Table name: congviecs
+#
+#  id                     :bigint           not null, primary key
+#  diachi                 :string
+#  guest_list             :string
+#  macongviec             :string
+#  ngay_bd                :datetime
+#  ngay_kt                :datetime
+#  row_order              :integer
+#  status                 :boolean          default(FALSE)
+#  them_cb                :boolean          default(FALSE)
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  board_id               :bigint
+#  google_event_id        :string
+#  lcongviec_trangthai_id :bigint           not null
+#  user_id                :bigint           not null
+#  vanban_id              :bigint
+#
+# Indexes
+#
+#  index_congviecs_on_board_id                (board_id)
+#  index_congviecs_on_lcongviec_trangthai_id  (lcongviec_trangthai_id)
+#  index_congviecs_on_macongviec              (macongviec) UNIQUE
+#  index_congviecs_on_user_id                 (user_id)
+#  index_congviecs_on_vanban_id               (vanban_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (board_id => boards.id)
+#  fk_rails_...  (lcongviec_trangthai_id => lcongviec_trangthais.id)
+#  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (vanban_id => vanbans.id)
+#
+require "test_helper"
+
+class CongviecTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
+end

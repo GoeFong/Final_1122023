@@ -1,0 +1,28 @@
+ <div class="container mx-auto p-4">
+    <div class="bg-white rounded-lg shadow-md p-4">
+        <h1 class="text-2xl font-semibold mb-4">Board xử lý công việc </h1>
+        <div class="flex gap-x-24 items-center px-4 border-y border-gray-200 justify-end">
+            <%#= form_with(url: search_boards_path, method: "get", id:"search-form",class: "flex w-1/2 items-center justify-center gap-4 mb-4 px-4 mt-4 ",
+            data: { controller: 'search-form',
+                      search_form_target: 'form',
+                       }) do |form| %>
+                    <%#= form.select :vanban_id, options_for_select(Vanban.pluck(:title, :id),  @vanban.present? ? @vanban.id : ""), {prompt: "Vui lòng chọn văn bản cần xử lý công việc"}, {  data: {controller: "slim", action: 'input->slim#search' } } %>
+                
+
+            <%# end %>
+            <div class="flex justify-end mt-4 mb-6">
+                <%#= render "btn_add" , vanban: @vanban %>
+                <%#= render "btn_refresh" , vanban: @vanban %>
+                <%=  link_to "Thêm board", new_board_path,   class: "ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"%>
+            </div>
+        </div>
+            <%= turbo_stream_from "boards"%>
+
+            <div id="boards" class="flex space-x-4" data-controller="sortable">
+                <%= render @boards %>
+            </div>
+            <%== pagy_nav(@pagy) %>
+           
+    </div>
+</div>
+

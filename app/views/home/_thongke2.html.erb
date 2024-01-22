@@ -1,0 +1,56 @@
+<%= turbo_frame_tag :showthongke do %>
+<div class="flex py-4">
+    <p class="text-2xl font-semibold leading-relaxed text-gray-800">Thống kê Công việc | Bảng</p>
+
+</div>
+<table class="table-auto border-collapse border-slate-400 w-full">
+    <thead class="bg-slate-50 dark:bg-slate-700">
+      <tr>
+        
+                  <%# <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Tên Board</th> %>
+                  <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Trạng thái</th>
+                  <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Số lượng</th>
+                  <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Tỉ lệ</th>
+                  <%# <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Số điện thoại</th>
+                  <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Email</th>
+                  <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">Trạng thái</th> %>
+                
+          <th class="border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left"></th>
+        
+      </tr>
+    </thead>
+
+    <tbody>
+      <% tong = Hash.new(0) %>
+      <% board.each do |n|%>
+        <tr>
+          <td colspan="4" class="bg-gray-200 text-red-500 border border-slate-300 p-4 text-left">Board <%= n %></td>
+        </tr>
+        <% kq.each do |trangthai| %>
+          <% if trangthai["name"] == n %>
+          <% tong[trangthai["name"]] += trangthai['tongsl'] %>
+          <% end %>
+        <% end %>
+
+        <% kq.each do |trangthai| %>
+          <% if trangthai["name"] == n %>
+            <tr>
+              <td class="border border-slate-300 p-4 text-left"><%= trangthai['trangthai'] %></td>
+              <td class="border border-slate-300 p-4 text-center"><%= trangthai['tongsl'] %></td>
+              <td class="border border-slate-300 p-4 text-center"><%= (((trangthai['tongsl'] / tong[trangthai["name"]].to_f) / 1.0 * 100).round / 100.0)*100 %>%</td>
+              <td class="border border-slate-300 p-4 text-center">
+                <%= link_to "Xem", boards_path, data:{turbo: false} %>
+              </td>
+              <%# tong += trangthai['tongsl'] %>
+            </tr>
+          <% end %>
+
+        <% end %>
+      <%end%>
+      <tr>
+         <%# <td  class="border text-center border-gray-400 text-2xl font-medium text-sm text-gray-700">Tổng</td> %>
+        <%# <td  class="border text-center border-gray-400 text-2xl font-medium text-sm text-gray-700">= tong</td>  %>
+      </tr>
+    </tbody>
+  </table>
+<% end %>

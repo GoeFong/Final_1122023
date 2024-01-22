@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Volkhov:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lilita+One&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/alumuko/vanilla-datetimerange-picker@latest/dist/vanilla-datetimerange-picker.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.modal {
+    position: fixed;
+    z-index: 1;
+    padding: 2em;
+    
+    /* Centering */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    /* Add the drop shadow */
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2), 0 5px 10px 0 rgba(0,0,0,0.19);
+}
+
+.cancel-button {
+    background-color: #1530ff;
+    font-size: 12px;
+    color: white;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+    text-decoration: none;
+}
+.cancel-button:hover {
+    background-color: #2640fe;
+}
+
+[type=checkbox]:indeterminate {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3e%3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3e%3c/svg%3e");
+    border-color: transparent;
+    background-color: currentColor;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat
+}
+
+[type=checkbox]:indeterminate:hover,[type=checkbox]:indeterminate:focus {
+    border-color: transparent;
+    background-color: currentColor
+}
+
+.pagy-nav.pagination {
+    @apply flex gap-x-2 justify-center pt-8;
+  }
+  
+  .page.next a {
+    @apply relative inline-flex items-center rounded-r-md border border-gray-300 px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-20 to-gray-800 stroke-current hover:text-indigo-600;
+  }
+  
+  .page.prev a {
+    @apply relative inline-flex items-center rounded-l-md border border-gray-300 px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-20 to-gray-800 stroke-current hover:text-indigo-600;
+  }
+  
+  .page.next.disabled {
+    @apply relative inline-flex items-center rounded-r-md border border-gray-300 bg-slate-100 px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-20;
+  }
+  
+  .page.prev.disabled {
+    @apply relative inline-flex items-center rounded-l-md border border-gray-300 bg-slate-100 px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-20;
+  }
+  
+  .page a, .page.gap {
+    @apply flex items-center justify-center w-10 h-10 font-medium rounded-full text-gray-400 hover:text-indigo-600;
+  }
+  
+  .page.active {
+    @apply flex items-center justify-center w-10 h-10 font-medium rounded-full bg-gray-800 text-white;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  .w-[25%] {
+    width: 25%;
+  }
+  
+  .w-[50%] {
+    width: 50%;
+  }
+  
+  .w-[75%] {
+    width: 75%;
+  }
+  
+  .w-[100%] {
+    width: 100%;
+  }

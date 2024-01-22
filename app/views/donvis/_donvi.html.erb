@@ -1,0 +1,44 @@
+<div id="<%= dom_id donvi %>">
+<div class="flex">
+
+  <p>
+    <strong>Tên đơn vị:</strong>
+    <%= donvi.ten %>
+  </p>
+
+  <p>
+    <strong>Country:</strong>
+    <%= donvi.country_label  %>
+  </p>
+
+  <p>
+    <strong>State:</strong>
+    <%= donvi.state_label  %>
+  </p>
+
+  <p>
+    <strong>City:</strong>
+    <%= donvi.city %>
+  </p>
+
+  <p>
+    <strong>Sdt:</strong>
+    <%= donvi.sdt %>
+  </p>
+
+  <p>
+    <strong>Email:</strong>
+    <%= donvi.email %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <% Donvi::TRANGTHAI_DONVI.each do |role| %>
+      <% if role[:gia_tri] == donvi.status %>
+        <%= role[:label] %>
+      <% end %>
+    <% end %>
+  </p>
+</div>
+
+</div>

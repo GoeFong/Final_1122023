@@ -1,0 +1,6 @@
+
+<% if vanban.present? %>
+    <%= link_to "Làm mới board", search_boards_path(vanban_id: vanban.id), class: "bg-primary-500 p-2 rounded-md text-white text-sm cursor-pointer hover:bg-primary-600 mb-4" %>
+<% else %>
+    <%= link_to "Làm mới board", boards_path, class: "bg-primary-500 p-2 rounded-md text-white text-sm cursor-pointer hover:bg-primary-600 mb-4" %>
+<% end %>

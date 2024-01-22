@@ -1,0 +1,112 @@
+<%if board.present?%>
+    <div id="<%= dom_id congviec %>" class="bg-white p-2 border border-gray-500 rounded-md mb-2" data-sortable-update-url="<%= sort_board_congviec_path(board,congviec)%>">
+      <div class="flex justify-between items-center">
+        <%= link_to board_congviec_path(board,congviec), class: "text-sm font-semibold flex items-center"  do %>
+            <span class="mr-2">
+            Công việc <%= stt  %> - <%= congviec.macongviec %> 
+            </span>
+        <% end %>
+
+        <div class="dropdown inline-block relative">
+            <button class="text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center">
+            <span class="mr-1 text-top">...</span>
+            </button>
+
+            <ul class="dropdown-menu absolute hidden text-gray-700 pt-1">
+            <li class="">
+                <%= turbo_frame_tag "edit_congviec_modal" do%>
+                    <%= link_to edit_board_congviec_path(board,congviec), data: { turbo_frame: 'modal', turbo_frame_target: '_top' }, class: "bg-gray-200 hover:bg-gray-400 py-2 px-4 block  w-full text-center" do %>
+                    Sửa
+                    <% end %>
+                <% end %>
+            </li>
+            <li class="">
+                 <%= button_to 'Xóa', board_congviec_path(board,congviec), method: :delete , class: "text-red-700 bg-gray-200 hover:bg-gray-400 py-2 px-4 block  w-full", data: {turbo_confirm: 'Are you sure?' } %>
+            </li>
+            <li class="">
+                <%= link_to "Đồng bộ với Google", sync_event_with_google_board_congviec_path(board,congviec),data: {turbo_method: :patch} , class: "rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block w-full" %>
+            </li>
+            </ul>
+        </div>
+        </div>
+
+      
+      <p style="color: <%=congviec.lcongviec_trangthai.color%> ">( <%= congviec.lcongviec_trangthai.label %> )</p>
+        
+      <div class="text-gray-600 text-xs mt-1"><span class="text-sm font-semibold">Ghi chú: </span><%= congviec.noidung %></div>
+      <div class="text-gray-600 text-xs mt-1"><span class="text-sm font-semibold">Địa chỉ: </span> <%= congviec.diachi %></div>
+      <div class="flex-row items-center justify-start">
+        <% check_tg = ( congviec.ngay_kt.to_date - Time.zone.now.to_date).to_i %>
+
+        <div class=" text-sm font-semibold">
+            Thời gian: 
+        </div>
+        <span>
+        Ngày <%=  congviec.ngay_bd.strftime("%d/%m/%Y") %> đến <%= congviec.ngay_kt.strftime("%d/%m/%Y") %>
+        </span>
+        <div class="flex-row items-center justify-start text-xs mt-1">
+            <div class="flex">
+                <div class="flex items-center justify-between">
+                    <p class="font-bold mr-2 ">
+                        Tiến độ: 
+                    </p>
+                    <% tiendo_mapping = {
+                        'vua_tiep_nhan' => '1/4',
+                        'dang_xu_ly' => "[50%]",
+                        'da_hoan_thanh' => 'full'
+                    } %>
+                    
+                    <div class="h-2 bg-[#e9ecf2] w-[80px] rounded-lg overflow-hidden flex items-stretch">
+                        <div class="bg-pigment-green w-<%= tiendo_mapping[congviec.lcongviec_trangthai.gia_tri] %>"></div>
+                    </div>
+                    <% tiendo = {
+                        'vua_tiep_nhan' => '25%',
+                        'dang_xu_ly' => "50%",
+                        'da_hoan_thanh' => '100%'
+                    } %>
+                    <span class="text-slate-grey text-xs font-bold ms-3"><%= tiendo[congviec.lcongviec_trangthai.gia_tri] %></span>
+                </div>
+                <span class="badge-flash-white">
+                    <% if congviec.lcongviec_trangthai.gia_tri != "da_hoan_thanh"%>
+                        <% if check_tg > 0%>
+                        <span class="block my-1 ml-1">( Còn <%= check_tg %> ngày )</span>
+                        <% else %>
+                        <span class="block my-1 ml-1">( Trễ <%= check_tg.abs %> ngày )</span>
+
+                        <% end %>
+                    <% else %>
+                        <span class="block my-1 ml-1">( Đã xong )</span>
+                    <% end %>
+                </span>
+            </div>
+           
+        </div>
+      </div>
+      <div class="">
+          <div class="text-sm font-semibold">
+              Cán bộ:
+          </div>
+          <div class="flex-row items-center justify-start text-xs mt-1">
+              <% if congviec.email_guest_list.any? %>
+                  <% congviec.email_guest_list.each do |user| %>
+                      <div class="bg-gray-200 text-black-300 text-xs mt-1 mr-3">
+                          <%= user%>
+                      </div>
+                  <% end %>
+              <% else %>
+                  <div class="bg-gray-200 text-red-800 text-xs mt-1">
+                      Chưa có cán bộ
+                  </div>
+              <% end %>
+              
+          </div>
+      </div>
+
+
+        <%= button_to "Gửi email thêm google lịch", invite_congviec_path(congviec), class:"bg-primary-200 border border-gray-600 mb-2 mt-1 rounded-md p-1" %>
+        <%= link_to "Tải lịch", them_lich_boards_path(congviec, format: :ics),class:"bg-primary-200 border border-gray-600 mb-2 mt-1 rounded-md p-1"  %>
+    </div>
+
+
+
+<% end %>

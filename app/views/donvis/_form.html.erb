@@ -1,0 +1,58 @@
+<%= form_with(model: donvi, data: {controller: "form-reset"}) do |form| %>
+<% if donvi.errors.any? %>
+<div id="error_explanation" class="bg-red-50 p-6 rounded text-red-800">
+  <h2 class="text-lg font-semibold mb-3"><%= pluralize(donvi.errors.count, "error") %> prohibited this donvi from being saved:</h2>
+
+  <ul class="list-disc leading-relaxed">
+    <% donvi.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+  <div class="mb-2">
+        <%= form.label :ten,"Tên đơn vị", class: label_class %>
+          <%= form.text_field :ten, class: input_class %>
+      </div>
+  <%= turbo_frame_tag :cs_select do %>
+    <div data-controller="form-element">
+       <%= form.button "Validate", formaction: new_donvi_path, formmethod: :get, data: { form_element_target: "remoteBtn", turbo_frame: :cs_select } %>
+        <div class="mb-2">
+              <%= form.label :country, "Quốc gia",class: label_class %>
+                <%= form.select :country, donvi.countries.invert, { include_blank: true }, { data: { controller: "slim", action: "change->form-element#autosubmit" }, class: input_class } %>
+            </div>
+        <div class="mb-2">
+              <%= form.label :state,"Tỉnh/ Thành Phố" ,class: label_class %>
+                <%= form.select :state, donvi.states.invert, {include_blank: true}, { data: { controller: "slim", action: "change->form-element#autosubmit"}, class: input_class } %>
+            </div>
+    </div>
+    <div class="mb-2">
+          <%= form.label :city,"Quận huyện", class: label_class %>
+            <%= form.select :city, donvi.cities, {include_blank: true}, { data:{ controller: "slim" },class: input_class} %>
+        </div>
+  <% end %>
+  <div class="mb-2">
+        <%= form.label :sdt, "Số điện thoại",class: label_class %>
+          <%= form.text_field :sdt, class: input_class %>
+      </div>
+  <div class="mb-2">
+        <%= form.label :email,"Địa chỉ email" ,class: label_class %>
+          <%= form.text_field :email, class: input_class %>
+      </div>
+  <div class="mb-2">
+        <%= form.label :status,"Trạng thái", class: label_class %>
+        <%= form.select :status, options_for_select(Donvi::TRANGTHAI_DONVI.map { |t| [t[:label], t[:gia_tri]] }), {}, class: "select rounded-full border-1 w-full" %>
+
+      </div>
+
+
+<% if donvi.persisted? %>
+<%= form.submit "Sửa đơn vị",class: button_class(theme: 'primary') %>
+<%= link_to "Hủy", donvi, class: "text-neutral-700 underline inline-block ml-3" %>
+<% else %>
+<%= form.submit "Tạo đơn vị",class: button_class(theme: 'primary') %>
+
+<%= link_to "Hủy", donvis_path, class:  "text-neutral-700 underline inline-block ml-3" %>
+<% end %>
+<% end %>

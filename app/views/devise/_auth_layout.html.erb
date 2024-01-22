@@ -1,0 +1,50 @@
+<%
+  subtitle ||= ""
+  title ||= "" %>
+<div class="flex justify-between min-h-screen font-sans">
+    <%# <div class="inset-auto z-30 flex items-center justify-center flex-1 w-full h-auto font-sans text-center text-white shadow lg:flex lg:h-screen lg:absolute xl:text-5xl">
+      <h1 class="font-semibold text-4xl">Your App Name Here</h1>
+    </div> %>
+    <div
+      class="hidden relative w-1/2 bg-center bg-cover lg:block"
+      style="background-image: url(<%= image_path("icons/hero.png") %>)"
+    >
+      <div class="flex absolute bottom-10 justify-center w-full ">
+        <div class="max-w-md text-center">
+          <span class="text-3xl font-bold leading-loose text-gray-900">
+            Control Bussiness
+          </span>
+          <p class="font-light leading-7 text-gray-500">
+            Dotra is the most comprehensive field service & asset managament platform with
+            combining flexibility.
+          </p>
+        </div>
+      </div>
+    </div>
+  <div class="flex-1 mx-auto max-w-2xl">
+    <div class="flex flex-col px-8 pt-10 lg:px-14 xl:px-24">
+        <%= link_to root_path, class:"link text-xl tracking-tight font-black group text-red-600 hover:text-red-700 transition ease-in-out flex items-center justify-end" do %>
+          <%= render_svg "icons/logo" , styles: " fill-current w-8 h-8 text-red-600 group-hover:text-red-700" %>
+          <span class="ml-2 text-lg font-black text-black">Helper</span>
+        <% end %>
+
+        <div class="pt-18 pb-6">
+          <%= link_to "Back", root_path, class: "text-gray-600 underline flex items-center hover:text-gray-700 hover:no-underline" %>
+          <h1 class="text-3xl font-bold tracking-wide leading-loose whitespace-nowrap">
+            Hi, Welcome back!
+          </h1>
+          <span class="font-light text-gray-500">
+            Login now to manage your job made easy.
+          </span>
+          <div class="flex justify-between items-center pt-6">
+            <hr class="w-full border-gray-400" />
+            <hr class="w-full border-gray-400" />
+          </div>
+
+          <%= yield %>
+
+          <%= render "devise/shared/links" %>
+        </div>
+    </div>
+  </div>
+</div>

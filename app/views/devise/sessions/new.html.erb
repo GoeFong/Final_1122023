@@ -1,0 +1,45 @@
+<%= render layout: "auth_layout", locals: { title: "Sign in" }  do %>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }) do |f| %>
+
+    <div class="pt-6">
+      <%= f.label :email,"Địa chỉ Email", class: label_class  %>
+      <div
+        class="flex overflow-hidden items-center mt-2 w-full rounded-lg border border-gray-400 transition-all focus-within:shadow-lg focus-within:border-orange-500"
+      >
+        <div class="flex justify-center items-center pl-6">
+          <%= render_svg "icons/email", styles: "w-6 h-6 pointer-events-none"%>
+        </div>
+
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "px-4 py-4.5 w-full focus:outline-none font-light border-0 focus:ring-0", placeholder: "example@gmail.com" %>
+      </div>
+
+    </div>
+
+    <div class="pt-6">
+      <%= f.label :password, "Mật khẩu",class: label_class %>
+      <div
+        class="flex overflow-hidden items-center mt-2 w-full rounded-lg border border-gray-400 transition-all focus-within:shadow-lg focus-within:border-orange-500"
+      >
+        <div class="flex justify-center items-center pl-6">
+          <%= render_svg "icons/lock", styles: "w-6 h-6 pointer-events-none"%>
+        </div>
+        <%= f.password_field :password, autocomplete: "current-password", class: "px-4 py-4.5 w-full focus:outline-none font-light border-0 focus:ring-0", placeholder: "Mật khẩu" %>
+      </div>
+
+    </div>
+
+    <div class="pt-6">
+      <% if devise_mapping.rememberable? %>
+        <%= f.check_box :remember_me, class: checkbox_class %>
+        <%= f.label :remember_me %>
+      <% end %>
+    </div>
+
+    <div class="pt-6">
+      <%= f.submit "Sign in", class: button_class(theme: "primary", variant: "expanded") %>
+    </div>
+  <% end %>
+  <div class="pt-6">
+    <%= link_to "Sign up", new_user_registration_path  %>
+  </div>
+<% end %>

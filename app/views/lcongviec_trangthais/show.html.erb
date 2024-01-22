@@ -1,0 +1,29 @@
+<div class="max-w-3xl mx-auto px-4">
+  <div class="flex items-center justify-between">
+    <h1 class="flex-1 font-bold text-3xl">Lcongviec_trangthai</h1>
+
+    <div class="flex-wrap lg:flex items-center lg:space-x-3">
+      <%= link_to lcongviec_trangthais_path, class: button_class(theme: "transparent") do %>
+      All Lcongviec_trangthais
+      <% end %>
+      <%= link_to edit_lcongviec_trangthai_path(@lcongviec_trangthai), class: button_class(theme:"primary") do %>
+      Xóa
+      <% end %>
+    </div>
+  </div>
+
+  <ul class="text-slate-700">
+      <li>
+        <p class="font-semibold">Label:</p>
+        <p><%= @lcongviec_trangthai.label %></p>
+      </li>
+      <li>
+        <p class="font-semibold">Gia tri:</p>
+        <p><%= @lcongviec_trangthai.gia_tri %></p>
+      </li>
+      <li>
+        <p class="font-semibold">Color:</p>
+        <p><%= @lcongviec_trangthai.color %></p>
+      </li>
+  </ul>
+</div>
